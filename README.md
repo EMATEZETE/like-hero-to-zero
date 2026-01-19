@@ -99,7 +99,7 @@ Zugangsdaten:
 
 ## Autor
 Name: Matthias Pröschel
-Matrikeln.: 32104901  
+Matrikelnr.: 32104901  
 Kurs: IPWA02-01  
 Studiengang: Wirtschaftsinformatik  
 IU Internationale Hochschule
