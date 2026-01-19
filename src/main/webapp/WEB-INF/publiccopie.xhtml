@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:metadata>
+    <f:viewAction action="#{loginBean.requireLogin}" />
+</f:metadata>
+
+<h:head>
+    <title>Scientist</title>
+</h:head>
+
+<h:body>
+
+    <p:menubar>
+        <p:menuitem value="Hero to Zero"
+                    icon="pi pi-globe"
+                    outcome="index" />
+
+        <p:menuitem value="Public"
+                    icon="pi pi-chart-line"
+                    outcome="public" />
+
+        <p:menuitem value="Login"
+                    icon="pi pi-sign-in"
+                    outcome="login"
+                    styleClass="ui-button-success ui-button-outlined" />
+    </p:menubar>
+
+  <!-- ADD FORM -->
+  <h:form>
+    <h2>Neuen CO₂-Datensatz hinzufügen</h2>
+
+    <p>
+      Datum:
+      <h:inputText value="#{co2Bean.date}" converter="localDateConverter" />
+    </p>
+
+    <p>
+      Land:
+      <h:inputText value="#{co2Bean.country}" />
+    </p>
+
+    <p>
+      CO₂:
+      <h:inputText value="#{co2Bean.co2}" />
+    </p>
+
+    <h:commandButton value="Hinzufügen" action="#{co2Bean.add}" />
+
+    <p><h:messages /></p>
+  </h:form>
+
+  <hr/>
+
+  <!-- TABLE FORM -->
+  <h:form>
+    <h2>CO₂-Daten</h2>
+
+    <h:dataTable value="#{co2Bean.records}" var="r" border="1">
+
+      <h:column>
+        <f:facet name="header">Datum</f:facet>
+
+        <h:panelGroup rendered="#{!co2Bean.isEditing(r)}">
+          <h:outputText value="#{r.date}" converter="localDateConverter" />
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{co2Bean.isEditing(r)}">
+          <h:inputText value="#{co2Bean.editDate}" converter="localDateConverter" />
+        </h:panelGroup>
+      </h:column>
+
+      <h:column>
+        <f:facet name="header">Land</f:facet>
+
+        <h:panelGroup rendered="#{!co2Bean.isEditing(r)}">
+          <h:outputText value="#{r.country}" />
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{co2Bean.isEditing(r)}">
+          <h:inputText value="#{co2Bean.editCountry}" />
+        </h:panelGroup>
+      </h:column>
+
+      <h:column>
+        <f:facet name="header">CO₂</f:facet>
+
+        <h:panelGroup rendered="#{!co2Bean.isEditing(r)}">
+          <h:outputText value="#{r.co2}" />
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{co2Bean.isEditing(r)}">
+          <h:inputText value="#{co2Bean.editCo2}" />
+        </h:panelGroup>
+      </h:column>
+
+      <h:column>
+        <f:facet name="header">Aktionen</f:facet>
+
+        <!-- Normal Mode -->
+        <h:panelGroup rendered="#{!co2Bean.isEditing(r)}">
+          <h:commandButton value="Edit" action="#{co2Bean.startEdit(r)}" />
+          <h:commandButton value="Delete" action="#{co2Bean.delete(r)}" />
+        </h:panelGroup>
+
+        <!-- Edit Mode -->
+        <h:panelGroup rendered="#{co2Bean.isEditing(r)}">
+          <h:commandButton value="Save" action="#{co2Bean.saveEdit}">
+            <f:ajax execute="@form" render="@form" />
+          </h:commandButton>
+
+          <h:commandButton value="Cancel" action="#{co2Bean.cancelEdit}">
+            <f:ajax execute="@form" render="@form" />
+          </h:commandButton>
+        </h:panelGroup>
+
+      </h:column>
+
+    </h:dataTable>
+  </h:form>
+
+  <hr/>
+
+  <!-- LOGOUT FORM -->
+  <h:form>
+    <h:commandButton value="Logout" action="#{loginBean.logout}" />
+  </h:form>
+
+</h:body>
+</html>

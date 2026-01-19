@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:metadata>
+    <f:viewAction action="#{loginBean.requireLogin}" />
+</f:metadata>
+
+<h:head>
+    <title>Scientist</title>
+
+    <h:outputStylesheet>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background-image: url("#{resource['images:background.png']}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .page-wrap {
+            max-width: 1100px;
+            margin: 24px auto;
+            padding: 0 12px;
+        }
+
+        .field {
+            margin-bottom: 14px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+    </h:outputStylesheet>
+</h:head>
+
+<h:body>
+
+    <p:menubar>
+        <p:menuitem value="Hero to Zero"
+                    icon="pi pi-globe"
+                    outcome="index" />
+
+        <p:menuitem value="Public"
+                    icon="pi pi-chart-line"
+                    outcome="public" />
+
+        <p:menuitem value="Scientist"
+                    icon="pi pi-database"
+                    outcome="scientist" />
+
+        <f:facet name="options">
+            <p:commandButton value="Logout"
+                             icon="pi pi-sign-out"
+                             action="#{loginBean.logout}"
+                             ajax="false"
+                             styleClass="ui-button-secondary ui-button-outlined" />
+        </f:facet>
+    </p:menubar>
+
+    <div class="page-wrap">
+        <h:form id="co2Form">
+
+            <p:messages id="msgs" showDetail="true" closable="true" />
+
+            <p:panel header="Neuen CO₂-Datensatz hinzufügen" style="margin-top:16px;">
+                <div class="field">
+                    <p:outputLabel for="date" value="Datum (yyyy-MM-dd)" />
+                    <p:datePicker id="date"
+                                  value="#{co2Bean.date}"
+                                  converter="localDateConverter"
+                                  pattern="yyyy-MM-dd"
+                                  showIcon="true"
+                                  monthNavigator="true"
+                                  yearNavigator="true"
+                                  style="width:100%;" />
+                </div>
+
+                <div class="field">
+                    <p:outputLabel for="country" value="Land" />
+                    <p:inputText id="country"
+                                 value="#{co2Bean.country}"
+                                 style="width:100%;" />
+                </div>
+
+                <div class="field">
+                    <p:outputLabel for="co2" value="CO₂" />
+                    <p:inputText id="co2"
+                                 value="#{co2Bean.co2}"
+                                 style="width:100%;" />
+                </div>
+
+                <p:commandButton value="Hinzufügen"
+                                 icon="pi pi-plus"
+                                 action="#{co2Bean.add}"
+                                 update="co2Form:msgs co2Form:co2Table"
+                                 styleClass="ui-button-success" />
+            </p:panel>
+
+            <p:panel header="CO₂-Daten" style="margin-top:16px;">
+                <p:dataTable id="co2Table"
+                             value="#{co2Bean.records}"
+                             var="r"
+                             paginator="true"
+                             rows="10"
+                             stripedRows="true"
+                             reflow="true"
+                             emptyMessage="Keine Daten gefunden">
+
+                    <p:column headerText="Datum" sortBy="#{r.date}">
+                        <h:panelGroup rendered="#{!co2Bean.isEditing(r)}">
+                            <h:outputText value="#{r.date}" converter="localDateConverter" />
+                        </h:panelGroup>
+
+                        <h:panelGroup rendered="#{co2Bean.isEditing(r)}">
+                            <p:datePicker value="#{co2Bean.editDate}"
+                                          converter="localDateConverter"
+                                          pattern="yyyy-MM-dd"
+                                          showIcon="true"
+                                          monthNavigator="true"
+                                          yearNavigator="true"
+                                          style="width:100%;" />
+                        </h:panelGroup>
+                    </p:column>
+
+                    <p:column headerText="Land"
+                              sortBy="#{r.country}"
+                              filterBy="#{r.country}"
+                              filterMatchMode="contains">
+                        <h:panelGroup rendered="#{!co2Bean.isEditing(r)}">
+                            <h:outputText value="#{r.country}" />
+                        </h:panelGroup>
+
+                        <h:panelGroup rendered="#{co2Bean.isEditing(r)}">
+                            <p:inputText value="#{co2Bean.editCountry}" style="width:100%;" />
+                        </h:panelGroup>
+                    </p:column>
+
+                    <p:column headerText="CO₂" sortBy="#{r.co2}">
+                        <h:panelGroup rendered="#{!co2Bean.isEditing(r)}">
+                            <h:outputText value="#{r.co2}">
+                                <f:convertNumber groupingUsed="true" maxFractionDigits="2" />
+                            </h:outputText>
+                        </h:panelGroup>
+
+                        <h:panelGroup rendered="#{co2Bean.isEditing(r)}">
+                            <p:inputText value="#{co2Bean.editCo2}" style="width:100%;" />
+                        </h:panelGroup>
+                    </p:column>
+
+                    <p:column headerText="Aktionen" style="width:220px;">
+                        <h:panelGroup rendered="#{!co2Bean.isEditing(r)}">
+                            <div class="actions">
+                                <p:commandButton value="Edit"
+                                                 icon="pi pi-pencil"
+                                                 action="#{co2Bean.startEdit(r)}"
+                                                 update="co2Form:co2Table" />
+
+                                <p:commandButton value="Delete"
+                                                 icon="pi pi-trash"
+                                                 action="#{co2Bean.delete(r)}"
+                                                 update="co2Form:msgs co2Form:co2Table"
+                                                 styleClass="ui-button-danger ui-button-outlined" />
+                            </div>
+                        </h:panelGroup>
+
+                        <h:panelGroup rendered="#{co2Bean.isEditing(r)}">
+                            <div class="actions">
+                                <p:commandButton value="Save"
+                                                 icon="pi pi-check"
+                                                 action="#{co2Bean.saveEdit}"
+                                                 update="co2Form:msgs co2Form:co2Table"
+                                                 styleClass="ui-button-success" />
+
+                                <p:commandButton value="Cancel"
+                                                 icon="pi pi-times"
+                                                 action="#{co2Bean.cancelEdit}"
+                                                 update="co2Form:co2Table"
+                                                 styleClass="ui-button-secondary ui-button-outlined" />
+                            </div>
+                        </h:panelGroup>
+                    </p:column>
+
+                </p:dataTable>
+            </p:panel>
+
+        </h:form>
+    </div>
+
+</h:body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>#{homeBean.title}</title>
+
+    <h:outputStylesheet>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background-image: url("#{resource['images:background.png']}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .center-logo {
+            min-height: calc(100vh - 56px); /* Platz für Menubar */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </h:outputStylesheet>
+</h:head>
+
+<h:body>
+
+    <p:menubar>
+        <p:menuitem value="Hero to Zero"
+                    icon="pi pi-globe"
+                    outcome="index" />
+
+        <p:menuitem value="Public"
+                    icon="pi pi-chart-line"
+                    outcome="public" />
+
+        <p:menuitem value="Login"
+                    icon="pi pi-sign-in"
+                    outcome="login"
+                    styleClass="ui-button-success ui-button-outlined" />
+    </p:menubar>
+
+    <div class="center-logo">
+        <h:graphicImage library="images"
+                        name="hero2zerologo.png"
+                        alt="Hero to Zero"/>
+    </div>
+
+</h:body>
+</html>

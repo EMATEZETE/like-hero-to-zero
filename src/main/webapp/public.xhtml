@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Public</title>
+
+    <h:outputStylesheet>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background-image: url("#{resource['images:background.png']}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .page-wrap {
+            max-width: 1100px;
+            margin: 24px auto;
+            padding: 0 12px;
+        }
+    </h:outputStylesheet>
+</h:head>
+
+<h:body>
+
+    <p:menubar>
+        <p:menuitem value="Hero to Zero"
+                    icon="pi pi-globe"
+                    outcome="index" />
+
+        <p:menuitem value="Public"
+                    icon="pi pi-chart-line"
+                    outcome="public" />
+
+        <p:menuitem value="Login"
+                    icon="pi pi-sign-in"
+                    outcome="login"
+                    styleClass="ui-button-success ui-button-outlined" />
+    </p:menubar>
+
+    <div class="page-wrap">
+        <h:form id="co2Form">
+            <p:panel header="CO₂-Daten">
+                <p:dataTable id="co2Table"
+                             value="#{co2Bean.records}"
+                             var="r"
+                             paginator="true"
+                             rows="10"
+                             stripedRows="true"
+                             reflow="true"
+                             emptyMessage="Keine Daten gefunden">
+
+                    <p:column headerText="Datum" sortBy="#{r.date}">
+                        <h:outputText value="#{r.date}" />
+                    </p:column>
+
+                    <p:column headerText="Land"
+                              sortBy="#{r.country}"
+                              filterBy="#{r.country}"
+                              filterMatchMode="contains">
+                        <h:outputText value="#{r.country}" />
+                    </p:column>
+
+                    <p:column headerText="CO₂" sortBy="#{r.co2}">
+                        <h:outputText value="#{r.co2}">
+                            <f:convertNumber groupingUsed="true"
+                                             maxFractionDigits="2" />
+                        </h:outputText>
+                    </p:column>
+
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </div>
+
+</h:body>
+</html>
