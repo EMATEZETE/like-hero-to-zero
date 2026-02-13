@@ -90,13 +90,6 @@ Zugangsdaten:
 
 ---
 
-## Hinweise zur Bewertung
-- Das Projekt erfüllt die technischen Mindestanforderungen der Fallstudie (JSF, JPA, Persistenz).
-- Vereinfachungen oder nicht vollständig umgesetzte Anforderungen werden in der schriftlichen Ausarbeitung transparent erläutert.
-- Fokus liegt auf Architektur, Nachvollziehbarkeit und funktionalem Prototyp.
-
----
-
 ## Autor
 Name: Matthias Pröschel
 Matrikelnr.: 32104901  
